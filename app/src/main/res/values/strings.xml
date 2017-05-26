@@ -5,10 +5,15 @@
     <string name="app_name">SQLite_Insert_Show_Delete_Sample</string>
     <string name="name">Name</string>
     <string name="phone">Phone</string>
-    <string name="insert">Insert</string>
-    <string name="show">Show</string>
-    <string name="delete">Delete</string>
+    <string name="insertData">Insert data</string>
+    <string name="showTable">Show table</string>
+    <string name="deleteTable">Delete table</string>
     <string name="dataInsert">Data insert</string>
     <string name="tableDeleted">Table deleted</string>
     <string name="tableNotFound">Table not found</string>
+    <string name="id">ID</string>
+    <string name="updateData">Update data</string>
+    <string name="deleteDataById">Delete data by id</string>
+    <string name="dataUpdate">Data update</string>
+    <string name="dataDelete">Data delete</string>
 </resources>

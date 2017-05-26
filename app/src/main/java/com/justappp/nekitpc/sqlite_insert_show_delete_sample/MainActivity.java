@@ -13,9 +13,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText edtName, edtPhone;
+    EditText edtName, edtPhone, edtUpdateDelete;
 
-    Button btnInsert, btnShow, btnDelete;
+    Button btnInsertData, btnShowTable, btnDeleteTable, btnUpdateData, btnDeleteDataById;
 
     DataBase dataBase;
 
@@ -28,14 +28,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         edtName = (EditText) findViewById(R.id.edtName);
         edtPhone = (EditText) findViewById(R.id.edtPhone);
+        edtUpdateDelete = (EditText) findViewById(R.id.edtUpdateDelete);
 
-        btnInsert = (Button) findViewById(R.id.btnInsert);
-        btnShow = (Button) findViewById(R.id.btnShow);
-        btnDelete = (Button) findViewById(R.id.btnDelete);
+        btnInsertData = (Button) findViewById(R.id.btnInsertData);
+        btnShowTable = (Button) findViewById(R.id.btnShowTable);
+        btnDeleteTable = (Button) findViewById(R.id.btnDeleteTable);
+        btnUpdateData = (Button) findViewById(R.id.btnUpdateData);
+        btnDeleteDataById = (Button) findViewById(R.id.btnDeleteDataById);
 
-        btnInsert.setOnClickListener(this);
-        btnShow.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
+        btnInsertData.setOnClickListener(this);
+        btnShowTable.setOnClickListener(this);
+        btnDeleteTable.setOnClickListener(this);
+        btnUpdateData.setOnClickListener(this);
+        btnDeleteDataById.setOnClickListener(this);
 
         dataBase = new DataBase(this);
 
@@ -46,20 +51,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        ContentValues cv = new ContentValues();
 
         switch (v.getId()) {
-            // Запись данных "name" и "phone" в таблицу "Contact"
-            case R.id.btnInsert:
-                ContentValues cv = new ContentValues();
+            case R.id.btnInsertData: // Запись данных "name" и "phone" в таблицу "Contact"
                 cv.put("name", edtName.getText().toString());
                 cv.put("phone", edtPhone.getText().toString());
                 sqLiteDatabase.insert("Contact", null, cv);
-
                 Toast.makeText(this, R.string.dataInsert, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.btnShow:
+            case R.id.btnShowTable: // показ таблицы "Contact" в консоль
                 Cursor cursor = sqLiteDatabase.query("Contact", null, null, null, null, null, null);
-
                 // курсор в первую ячейку
                 if (cursor.moveToFirst()) {
                     //курсор начинает считывать с первой ячейки и пока у нас есть ячейки
@@ -73,10 +75,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(this, R.string.tableNotFound, Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.btnDelete:
+            case R.id.btnDeleteTable: // удаление всей таблицы
                 sqLiteDatabase.delete("Contact", null, null); // Удаление всей таблицы
-
                 Toast.makeText(this, R.string.tableDeleted, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnUpdateData: // обновление данных таблицы по id
+                cv.put("name", edtName.getText().toString());
+                cv.put("phone", edtPhone.getText().toString());
+                sqLiteDatabase.update("Contact", cv, "id = ?", new String[]{edtUpdateDelete.getText().toString()});
+                Toast.makeText(this, R.string.dataUpdate, Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnDeleteDataById: // удаление данных таблицы по id
+                sqLiteDatabase.delete("Contact", "id = " + edtUpdateDelete.getText().toString(),null);
+                Toast.makeText(this, R.string.dataDelete, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
