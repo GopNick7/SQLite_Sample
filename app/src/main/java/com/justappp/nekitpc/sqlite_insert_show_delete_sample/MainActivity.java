@@ -3,12 +3,14 @@ package com.justappp.nekitpc.sqlite_insert_show_delete_sample;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -16,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText edtName, edtPhone, edtUpdateDelete;
 
     Button btnInsertData, btnShowTable, btnDeleteTable, btnUpdateData, btnDeleteDataById;
+
+    RadioGroup radioGroup;
 
     DataBase dataBase;
 
@@ -46,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // передаем возможность редактирования нашей базы
         sqLiteDatabase = dataBase.getWritableDatabase();
+
+        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
+        radioGroupSorted();
 
     }
 
@@ -86,9 +93,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, R.string.dataUpdate, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnDeleteDataById: // удаление данных таблицы по id
-                sqLiteDatabase.delete("Contact", "id = " + edtUpdateDelete.getText().toString(),null);
+                sqLiteDatabase.delete("Contact", "id = " + edtUpdateDelete.getText().toString(), null);
                 Toast.makeText(this, R.string.dataDelete, Toast.LENGTH_SHORT).show();
                 break;
         }
     }
+
+    private void radioGroupSorted() {
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbByName: // сортировка и вывод таблицы по "name"
+                        Cursor cursor = sqLiteDatabase.query("Contact", null, null, null, null, null, "name"); // сортировка таблицы по "name"
+                        // курсор в первую ячейку
+                        if (cursor.moveToFirst()) {
+                            //курсор начинает считывать с первой ячейки и пока у нас есть ячейки
+                            do { // вывод таблицы в консоль
+                                Log.d("log",
+                                        "id " + cursor.getInt(cursor.getColumnIndex("id")) +
+                                                " name " + cursor.getString(cursor.getColumnIndex("name")) +
+                                                " phone " + cursor.getInt(cursor.getColumnIndex("phone")));
+                            } while (cursor.moveToNext());
+                        } else {
+                            Toast.makeText(MainActivity.this, R.string.tableNotSortedByName, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+
+                    case R.id.rbByPhone: // сортировка и вывод таблицы по "phone" в консоль
+                        cursor = sqLiteDatabase.query("Contact", null, null, null, null, null, "phone");
+                        // курсор в первую ячейку
+                        if (cursor.moveToFirst()) {
+                            //курсор начинает считывать с первой ячейки и пока у нас есть ячейки
+                            do {
+                                Log.d("log",
+                                        "id " + cursor.getInt(cursor.getColumnIndex("id")) +
+                                                " name " + cursor.getString(cursor.getColumnIndex("name")) +
+                                                " phone " + cursor.getInt(cursor.getColumnIndex("phone")));
+                            } while (cursor.moveToNext());
+                        } else {
+                            Toast.makeText(MainActivity.this, R.string.tableNotSortedByPhone, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+            }
+        });
+    }
+
 }

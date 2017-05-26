@@ -16,4 +16,8 @@
     <string name="deleteDataById">Delete data by id</string>
     <string name="dataUpdate">Data update</string>
     <string name="dataDelete">Data delete</string>
+    <string name="sortedByName">Sorted by name</string>
+    <string name="sortedByPhone">Sorted by phone</string>
+    <string name="tableNotSortedByName">Table not sorted by NAME</string>
+    <string name="tableNotSortedByPhone">Table not sorted by PHONE</string>
 </resources>
