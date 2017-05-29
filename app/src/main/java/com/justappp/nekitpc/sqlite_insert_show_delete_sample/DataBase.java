@@ -5,9 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class DataBase extends SQLiteOpenHelper {
-    public DataBase(Context context) {
-        super(context, "db", null, 1);
+class DataBase extends SQLiteOpenHelper {
+    DataBase(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
     }
 
     @Override
